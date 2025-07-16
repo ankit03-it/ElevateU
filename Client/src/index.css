@@ -1,1 +1,14 @@
 @import "tailwindcss";
+
+
+.neon-glow {
+  text-shadow: 0 0 8px #00ff88, 0 0 16px #00ff88, 0 0 24px #00ff88;
+}
+
+.neon-card:hover {
+  box-shadow: 0 0 15px #00ff88aa, 0 0 25px #00ff88aa;
+}
+
+.glow-on-hover:hover {
+  box-shadow: 0 0 10px #00ff88cc, 0 0 20px #00ff88cc, inset 0 0 10px #00ff88cc;
+}
