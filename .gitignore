@@ -4,4 +4,5 @@ server/venv/
 __pycache__/
 *.pyc
 .env
-.DS_Store
+.DS_StoreLive_HR_Voice_Analysis/gemini-service-account.json 
+Live_HR_Voice_Analysis/gemini-service-account.json 
