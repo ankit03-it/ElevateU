@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Interview Coach</title>
+
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Favicon: A small icon displayed in the browser tab -->
+    <link
+        href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiMwMGU1ZmYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBjbGFzcz0ibHVjaWRlIGx1Y2lkZS1taWMtdm9jYWwiPjxwYXRoIGQ9Ik0xMiAxYTIuNSAyLjUgMCAwIDAgLTIuNSAyLjV2NWEyLjUgMi41IDAgMCAwIDUgMFYzLjVBMi41IDIuNSAwIDAgMCAxMiAxWiIvPjxwYXRoIGQ9Ik0xMCAxNGExLjUgMS41IDAgMCAwIDMgMHYzLjVhMi41IDIuNSAwIDAgMSAtNSAwVjE1YTIuNSAyLjUgMCAwIDAgMi41LTIuNVoiLz48cGF0aCBkPSJNMTYgMTJDMTYgMTQuMiAxNC4yIDE2IDEyIDE2UzggMTQuMiA4IDEyIi8+PHBhdGggZD0iTTE2LjUgMTcuNWExLjU2IDEuNTYgMCAwIDAgMi4yLTIuMiIvPjxwYXRoIGQ9Ik01LjMgMTUuN2ExLjU2IDEuNTYgMCAwIDAgMi4yIDIuMiIvPjxwYXRoIGQ9Ik0xMiAyMHYxIi8+PC9zdmc+"
+        rel="icon" type="image/svg+xml">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+    <!-- Lucide Icons: A collection of beautiful and customizable open-source icons -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+
+</head>
+
+<body class="text-slate-300">
+
+    <div class="min-h-screen flex flex-col items-center justify-center p-4 lg:p-8">
+
+        <div class="card-bg rounded-3xl shadow-2xl w-full max-w-6xl overflow-hidden">
+
+            <header class="p-6 md:p-8 border-b border-slate-700 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div class="flex items-center gap-4">
+
+                    <div class="bg-sky-500/10 p-3 rounded-xl border border-sky-500/20 shadow-md">
+                        <i data-lucide="mic" class="text-sky-400 w-8 h-8"></i>
+                    </div>
+
+                    <h1 class="text-3xl font-extrabold text-slate-100 tracking-tight">AI Interview Coach</h1>
+                </div>
+
+                <a href="https://github.com/" target="_blank" rel="noopener noreferrer"
+                    class="text-sm text-slate-500 hover:text-sky-400 transition-colors duration-300 flex items-center gap-1">
+                    <i data-lucide="github" class="w-4 h-4"></i> Powered by LOLicon
+                </a>
+            </header>
+
+            <main class="p-6 md:p-8 lg:p-10">
+
+                <section id="setupContainer" class="mb-10" aria-labelledby="setup-heading">
+                    <h2 id="setup-heading" class="text-xl font-bold text-slate-200 mb-4 flex items-center gap-2">
+                        <i data-lucide="mic-vocal" class="w-6 h-6 text-sky-400"></i> Step 1: Select a Question & Record Your Answer
+                    </h2>
+                    <p class="text-slate-400 mb-6 max-w-2xl">Choose a common interview question from the list below, then click "Start Recording". Speak clearly and answer as you would in a real interview. The AI will analyze your response.</p>
+
+                    <div class="card-bg p-6 md:p-8 rounded-xl border border-slate-700/50 shadow-inner">
+                        <!-- Question Selection Dropdown -->
+                        <div class="mb-8">
+                            <label for="interviewQuestion"
+                                class="block text-sm font-medium text-slate-300 mb-2">Interview Question:</label>
+                            <select id="interviewQuestion"
+                                class="w-full p-3 rounded-lg bg-slate-700 border border-slate-600 text-slate-200 focus:ring-2 focus:ring-sky-500 focus:border-sky-500 transition-all duration-200 appearance-none cursor-pointer"
+                                aria-describedby="question-select-description">
+                                <option value="">-- Choose a question --</option>
+                                <option value="Tell me about yourself.">Tell me about yourself.</option>
+                                <option value="Why are you interested in this position?">Why are you interested in this position?</option>
+                                <option value="What are your greatest strengths?">What are your greatest strengths?</option>
+                                <option value="What are your greatest weaknesses?">What are your greatest weaknesses?</option>
+                                <option value="Where do you see yourself in five years?">Where do you see yourself in five years?</option>
+                                <option value="Why do you want to leave your current job?">Why do you want to leave your current job?</option>
+                                <option value="How do you handle stress and pressure?">How do you handle stress and pressure?</option>
+                                <option value="Describe a challenging situation you faced and how you overcame it.">Describe a challenging situation you faced and how you overcame it.</option>
+                                <option value="Do you have any questions for me?">Do you have any questions for me?</option>
+                            </select>
+                            <p id="question-select-description" class="sr-only">Select an interview question from the dropdown list.</p>
+                        </div>
+
+                        <div class="flex flex-col sm:flex-row justify-center items-center gap-4">
+                            <button id="startRecord"
+                                class="btn-primary w-full sm:w-auto flex items-center justify-center gap-2 text-white font-bold py-3 px-6 rounded-full transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-sky-500/50 disabled:opacity-50 disabled:cursor-not-allowed disabled:scale-100"
+                                aria-label="Start recording your answer">
+                                <i data-lucide="play-circle" class="w-5 h-5"></i>
+                                Start Recording
+                            </button>
+                            <button id="stopRecord"
+                                class="btn-secondary w-full sm:w-auto flex items-center justify-center gap-2 text-white font-bold py-3 px-6 rounded-full transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-rose-500/50 disabled:opacity-50 disabled:cursor-not-allowed disabled:scale-100"
+                                disabled aria-label="Stop recording your answer">
+                                <i data-lucide="stop-circle" class="w-5 h-5"></i>
+                                Stop Recording
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+                <div id="statusMessage" role="status" aria-live="polite"
+                    class="mt-8 text-center text-lg font-semibold text-sky-400 flex items-center justify-center gap-3 min-h-[40px]">
+
+                </div>
+
+                <div id="errorMessage" role="alert" aria-live="assertive"
+                    class="mt-6 text-center text-lg font-semibold text-rose-400 p-4 bg-rose-500/10 rounded-lg border border-rose-500/20 shadow-md hidden">
+                </div>
+
+                <section id="resultsContainer" class="hidden mt-12" aria-labelledby="results-heading">
+                    <h2 id="results-heading" class="text-xl font-bold text-slate-200 mb-4 flex items-center gap-2">
+                        <i data-lucide="clipboard-check" class="w-6 h-6 text-green-400"></i> Step 2: Review Your Analysis
+                    </h2>
+                    <p class="text-slate-400 mb-8 max-w-2xl">Here's the detailed breakdown of your performance, along with a personalized plan to help you improve. Use this feedback to refine your interview skills!</p>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+                        <div class="lg:col-span-1 space-y-6">
+
+                            <div class="card-bg p-6 rounded-xl border border-slate-700/50 text-center shadow-lg">
+                                <h3 class="text-sm font-medium text-slate-400 uppercase tracking-wider mb-2">Overall Score</h3>
+                                <p class="text-7xl font-extrabold text-sky-400 leading-tight">
+                                    <span id="overallScore">0.0</span><span class="text-4xl text-slate-500">/10</span>
+                                </p>
+                                <p class="text-sm text-slate-500 mt-2">A comprehensive rating of your response.</p>
+                            </div>
+
+                            <div class="card-bg p-6 rounded-xl border border-slate-700/50 shadow-lg">
+                                <h3 class="text-md font-semibold text-slate-200 mb-4 flex items-center gap-2">
+                                    <i data-lucide="play" class="w-5 h-5 text-sky-400"></i> Your Recorded Response
+                                </h3>
+
+                                <audio id="audioPlayback" controls preload="auto" class="w-full rounded-lg shadow-inner bg-slate-700"
+                                    aria-label="Playback of your recorded interview response"></audio>
+                                <div class="text-xs text-slate-400 mt-4 space-y-2">
+                                    <p><span class="font-semibold text-slate-300">Question:</span> <span
+                                            id="displayedQuestion" class="italic"></span></p>
+                                    <p><span class="font-semibold text-slate-300">Duration:</span> <span
+                                            id="audioDuration"></span>s</p>
+                                    <p><span class="font-semibold text-slate-300">Pace:</span> <span
+                                            id="wordsPerMinute"></span> WPM</p>
+                                </div>
+                            </div>
+
+                            <div class="card-bg p-6 rounded-xl border border-slate-700/50 shadow-lg">
+                                <h3 class="text-md font-semibold text-slate-200 mb-4 flex items-center gap-2">
+                                    <i data-lucide="bar-chart-2" class="w-5 h-5 text-green-400"></i> Performance Metrics
+                                </h3>
+                                <div id="scoresList" class="space-y-3">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="lg:col-span-2 card-bg p-6 md:p-8 rounded-xl border border-slate-700/50 shadow-lg">
+                            <h3 class="text-md font-semibold text-slate-200 mb-4 flex items-center gap-2">
+                                <i data-lucide="book-open" class="w-5 h-5 text-violet-400"></i> Your Personalized Improvement Plan
+                            </h3>
+                            <div class="border-t border-slate-700/50 pt-6">
+                                <p class="text-sm text-slate-400 mb-6 italic">Based on your response, here's what you did well and how you can practice to become even better.</p>
+                                <div id="tutoringPlan" class="space-y-4">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-bg p-6 md:p-8 rounded-xl border border-slate-700/50 shadow-lg mt-8">
+                        <h3 class="text-md font-semibold text-slate-200 mb-4 flex items-center gap-2">
+                            <i data-lucide="align-left" class="w-5 h-5 text-yellow-400"></i> Full Transcription
+                        </h3>
+                        <p id="transcribedText" class="text-slate-300 leading-relaxed text-sm italic bg-slate-800/30 p-4 rounded-lg border border-slate-700/30"
+                            aria-live="polite"></p>
+                    </div>
+
+                    <div class="text-center mt-10">
+                        <button id="startNewAnalysis"
+                            class="btn-tertiary flex items-center justify-center gap-2 text-white font-bold py-3 px-8 rounded-full shadow-lg transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-violet-500/50 mx-auto"
+                            aria-label="Start a new interview analysis">
+                            <i data-lucide="rotate-ccw" class="w-5 h-5"></i> Start New Analysis
+                        </button>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <script>
+
+        document.addEventListener("DOMContentLoaded", function () {
+            if (typeof lucide !== "undefined") {
+                lucide.createIcons(); 
+            } else {
+                console.error("Lucide icons library is not loaded properly. Ensure the CDN link is correct and accessible.");
+            }
+        });
+    </script>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+
+</html>

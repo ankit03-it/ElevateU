@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Interview Coach - Live</title>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Favicon (using Lucide icon as SVG) -->
+    <link
+        href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiMwMGU1ZmYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBjbGFzcz0ibHVjaWRlIGx1Y2lkZS1taWMtdm9jYWwiPjxwYXRoIGQ9Ik0xMiAxYTIuNSAyLjUgMCAwIDAgLTIuNSAyLjV2NWEyLjUgMi41IDAgMCAwIDUgMFYzLjVBMi41IDIuNSAwIDAgMCAxMiAxWiIvPjxwYXRoIGQ9MTAgMTRhMS41IDEu1IDAgMCAwIDMgMDB2My41YTIuNSAyLjUgMCAwIDEtNSAwVjE1YTIuNSAyLjUgMCAwIDAgMi41LTIuNVoiLz48cGF0aCBkPSJNMTYgMTJDMTYgMTQuMiAxNC4yIDE2IDEyIDE2UzggMTQuMiA4IDEyIiIvPjxwYXRoIGQ9Ik0xNi41IDE3LjVhMS41NiAxLjU2IDAgMCAwIDUuMi0yLjIiLz48cGF0aCBkPSJNNS4zIDE1LjdhMS41NiAxLjU2IDAgMCAwIDIuMiAyLjIiLz48cGF0aCBkPSJNMTIgMjB2MSIvPjwvc3ZnPg=="
+        rel="icon" type="image/svg+xml">
+
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0F172A;
+            background-image: radial-gradient(circle at 1px 1px, #334155 1px, transparent 0);
+            background-size: 2rem 2rem;
+            color: #CBD5E1;
+        }
+
+        /* Custom scrollbar for chat messages */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #1E293B;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #475569;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #64748B;
+        }
+
+        /* Keyframe animations */
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.1); }
+        }
+
+        .recording-active {
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loader {
+            border: 4px solid #334155;
+            border-top: 4px solid #38BDF8;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+        }
+
+        /* Button styles */
+        .btn-primary {
+            background: linear-gradient(to right, #0EA5E9, #3B82F6);
+            box-shadow: 0 4px 14px 0 rgba(14, 165, 233, 0.3);
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(to right, #3B82F6, #0EA5E9);
+            box-shadow: 0 6px 20px 0 rgba(59, 130, 246, 0.4);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(to right, #EF4444, #DC2626);
+            box-shadow: 0 4px 14px 0 rgba(239, 68, 68, 0.3);
+        }
+
+        .btn-secondary:hover {
+            background: linear-gradient(to right, #DC2626, #EF4444);
+            box-shadow: 0 6px 20px 0 rgba(220, 38, 38, 0.4);
+        }
+
+        /* Card background with gradient and border */
+        .card-bg {
+            background: linear-gradient(135deg, #1E293B, #1A202C);
+            border: 1px solid #334155;
+        }
+
+        /* Chat message bubble styles */
+        .chat-message {
+            padding: 0.75rem 1rem;
+            border-radius: 0.75rem;
+            margin-bottom: 0.5rem;
+            max-width: 80%;
+            word-wrap: break-word;
+        }
+
+        .chat-message.user {
+            background-color: #3B82F6; /* blue-500 */
+            color: white;
+            align-self: flex-end; /* Align user messages to the right */
+            border-bottom-right-radius: 0.25rem; /* Slightly flatten corner for user */
+        }
+
+        .chat-message.ai {
+            background-color: #475569; /* slate-600 */
+            color: #E2E8F0; /* slate-200 */
+            align-self: flex-start; /* Align AI messages to the left */
+            border-bottom-left-radius: 0.25rem; /* Slightly flatten corner for AI */
+        }
+
+        /* Custom file input styling */
+        .file-input-wrapper {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+            cursor: pointer;
+        }
+
+        .file-input-wrapper input[type=file] {
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body class="text-slate-300">
+    <div class="min-h-screen flex flex-col items-center justify-center p-4 lg:p-8">
+
+        <div class="card-bg rounded-3xl shadow-2xl w-full max-w-4xl overflow-hidden">
+
+            <header class="p-6 md:p-8 border-b border-slate-700 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div class="flex items-center gap-4">
+                    <div class="bg-sky-500/10 p-3 rounded-xl border border-sky-500/20 shadow-md">
+                        <i data-lucide="message-circle" class="text-sky-400 w-8 h-8"></i>
+                    </div>
+                    <h1 class="text-3xl font-extrabold text-slate-100 tracking-tight">AI Interview Coach - Live</h1>
+                </div>
+                <a href="https://github.com/Manojit-Pal" target="_blank" rel="noopener noreferrer"
+                    class="text-sm text-slate-500 hover:text-sky-400 transition-colors duration-300 flex items-center gap-1">
+                    <i data-lucide="github" class="w-4 h-4"></i> Powered by Ankit & Manojit
+                </a>
+            </header>
+
+            <main class="p-6 md:p-8 lg:p-10">
+                <section aria-labelledby="live-chat-heading">
+                    <h2 id="live-chat-heading" class="text-xl font-bold text-slate-200 mb-4 flex items-center gap-2">
+                        <i data-lucide="message-square" class="w-6 h-6 text-sky-400"></i> Live Conversation
+                    </h2>
+                    <p class="text-slate-400 mb-6 max-w-2xl">Click "Start Conversation" to begin your live interview practice. Type your answers, and the AI will respond in real-time. Click "End Conversation" when you're done.</p>
+
+                    <!-- Resume Upload Section -->
+                    <div class="mb-6 p-4 card-bg rounded-xl border border-slate-700/50 shadow-inner flex flex-col sm:flex-row items-center justify-between gap-4">
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="file-text" class="w-6 h-6 text-blue-400"></i>
+                            <span class="text-lg font-semibold text-slate-200">Upload Your Resume (Optional)</span>
+                        </div>
+                        <div class="flex items-center gap-3 w-full sm:w-auto">
+                            <div class="file-input-wrapper flex-grow">
+                                <input type="file" id="resume-upload" accept=".pdf,.doc,.docx" class="hidden">
+                                <label for="resume-upload" id="resume-upload-label"
+                                    class="cursor-pointer bg-slate-700 text-slate-300 py-2 px-4 rounded-lg border border-slate-600 hover:bg-slate-600 transition-colors duration-200 flex items-center gap-2 justify-center">
+                                    <i data-lucide="upload" class="w-5 h-5"></i>
+                                    <span id="file-name-display">Choose File (PDF, DOCX)</span>
+                                </label>
+                            </div>
+                            <button id="upload-resume-button"
+                                class="btn-primary flex-shrink-0 flex items-center justify-center gap-2 text-white font-bold py-2 px-4 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-sky-500/50 disabled:opacity-50 disabled:cursor-not-allowed disabled:scale-100"
+                                disabled>
+                                <i data-lucide="send" class="w-5 h-5"></i> Upload
+                            </button>
+                        </div>
+                        <div id="upload-status" class="text-sm text-slate-400 mt-2 sm:mt-0 sm:ml-4"></div>
+                    </div>
+
+
+                    <!-- Chat Area -->
+                    <div class="card-bg p-6 rounded-xl border border-slate-700/50 shadow-inner h-[500px] flex flex-col">
+                        <div id="chat-messages" class="flex-grow overflow-y-auto pr-2 mb-4 space-y-3 flex flex-col">
+                            <!-- Initial welcome message -->
+                            <div class="chat-message ai self-start">
+                                Hello! I'm Eva, your AI HR Interview Coach. Click "Start Conversation" below to begin your mock interview. You can also upload your resume first for a more personalized experience.
+                            </div>
+                            <!-- Chat messages will be appended here by script.js -->
+                        </div>
+
+                        <!-- Input/Status Area -->
+                        <div class="flex flex-col gap-4 mt-auto">
+                            <!-- Status Indicator -->
+                            <div id="status-indicator" class="flex-grow text-center text-lg font-semibold text-sky-400 flex items-center justify-center gap-3 min-h-[40px]">
+                                <!-- Status messages (e.g., "Ready to start...", "AI is thinking...") -->
+                                <span id="status-text">Ready to start...</span>
+                            </div>
+
+                            <!-- Text Input and Send Button -->
+                            <div id="text-input-area" class="flex items-center gap-3 w-full" style="display: none;">
+                                <input type="text" id="user-input" placeholder="Type your answer here..."
+                                    class="flex-grow p-3 rounded-full bg-slate-700 border border-slate-600 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-500 transition-all duration-200">
+                                <button id="send-button"
+                                    class="btn-primary flex-shrink-0 flex items-center justify-center p-3 rounded-full text-white transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-sky-500/50 disabled:opacity-50 disabled:cursor-not-allowed disabled:scale-100">
+                                    <i data-lucide="send" class="w-5 h-5"></i>
+                                </button>
+                            </div>
+
+                            <!-- Control Buttons -->
+                            <div class="flex items-center justify-center gap-4 w-full">
+                                <button id="start-conversation"
+                                    class="btn-primary flex items-center justify-center gap-2 text-white font-bold py-3 px-6 rounded-full transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-sky-500/50 disabled:opacity-50 disabled:cursor-not-allowed disabled:scale-100">
+                                    <i data-lucide="mic" class="w-5 h-5"></i>
+                                    Start Conversation
+                                </button>
+                                <button id="end-conversation"
+                                    class="btn-secondary flex items-center justify-center gap-2 text-white font-bold py-3 px-6 rounded-full transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-rose-500/50 disabled:opacity-50 disabled:cursor-not-allowed disabled:scale-100"
+                                    disabled>
+                                    <i data-lucide="stop-circle" class="w-5 h-5"></i>
+                                    End Conversation
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Error Message Display -->
+                        <div id="error-message" class="mt-4 text-center text-lg font-semibold text-rose-400 p-3 bg-rose-500/10 rounded-lg border border-rose-500/20 shadow-md hidden">
+                            <!-- Error messages will be displayed here -->
+                        </div>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <!-- Socket.IO Client Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.min.js"></script>
+    <script>
+        // Initialize Lucide icons after DOM content is loaded
+        document.addEventListener("DOMContentLoaded", function () {
+            if (typeof lucide !== "undefined") {
+                lucide.createIcons();
+            } else {
+                console.error("Lucide icons library is not loaded properly. Ensure the CDN link is correct and accessible.");
+            }
+        });
+    </script>
+    <!-- Your custom script.js (must be loaded after Socket.IO and Lucide) -->
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+
+</html>
+
+
+
