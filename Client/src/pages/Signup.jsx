@@ -14,11 +14,46 @@ function Signup() {
         setFormData({ ...formData, [e.target.name]: e.target.value })
     }
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault()
-        console.log('Signup data:', formData)
-        // Later: Send to backend API
+
+        if (formData.password !== formData.confirmPassword) {
+            alert("Passwords do not match")
+            return
+        }
+
+        try {
+            const res = await fetch("http://localhost:5000/api/auth/signup", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    username: formData.name,
+                    email: formData.email,
+                    password: formData.password,
+                }),
+            })
+
+            const data = await res.json()
+
+            if (res.ok) {
+                alert(data.message) // or redirect to login
+                setFormData({
+                    name: '',
+                    email: '',
+                    password: '',
+                    confirmPassword: '',
+                })
+            } else {
+                alert(data.error || "Signup failed")
+            }
+        } catch (error) {
+            console.error("Signup Error:", error)
+            alert("Something went wrong")
+        }
     }
+
 
     return (
         <>

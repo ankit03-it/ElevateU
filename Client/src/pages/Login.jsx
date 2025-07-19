@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom'; // ← Import useNavigate
 
 function Login() {
+    const navigate = useNavigate(); // ← Hook to navigate programmatically
+
     const [formData, setFormData] = useState({
         email: '',
         password: '',
@@ -13,15 +16,38 @@ function Login() {
         }));
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        // 🔒 Handle login logic here
         console.log('Logging in with', formData);
+
+        try {
+            const res = await fetch("http://localhost:5000/api/auth/login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(formData),
+            });
+
+            const data = await res.json();
+
+            if (!res.ok) {
+                throw new Error(data.error || "Login failed");
+            }
+
+            console.log("✅ Login successful!", data.message);
+            alert(data.message);
+
+            // 🚀 Navigate to dashboard
+            navigate("/dashboard");
+        } catch (err) {
+            console.error("❌ Login Error:", err.message);
+            alert(err.message);
+        }
     };
 
     return (
         <div className="min-h-screen bg-black text-white flex flex-col">
-
             {/* 🔰 Navbar */}
             <nav className="flex justify-between items-center px-6 py-4 bg-gray-950 relative z-10">
                 <div className='flex items-center'>
@@ -50,7 +76,6 @@ function Login() {
                 >
                     Back to Home
                 </a>
-
             </nav>
 
             {/* 🌈 Glowing navbar separator */}
@@ -92,6 +117,16 @@ function Login() {
                             Login 🔓
                         </button>
                     </form>
+                    <div className="mt-4 text-center">
+                        <span className="text-gray-300">Don't have an account? </span>
+                        <button
+                            onClick={() => navigate("/signup")}
+                            className="text-green-400 hover:underline font-semibold"
+                        >
+                            Sign up here
+                        </button>
+                    </div>
+
                 </div>
             </div>
         </div>

@@ -87,12 +87,17 @@ function Home() {
       {/* Features */}
       <section className="grid sm:grid-cols-2 md:grid-cols-3 gap-8 px-8 py-16 bg-black">
         {features.map((f, idx) => (
-          <div key={idx} className="bg-gray-900 p-6 rounded-xl shadow-md border border-green-400 hover:scale-[1.03] transition duration-300 neon-card">
+          <Link
+            to="/login"
+            key={idx}
+            className="bg-gray-900 p-6 rounded-xl shadow-md border border-green-400 hover:scale-[1.03] transition duration-300 neon-card block"
+          >
             <h3 className="text-2xl font-bold text-green-400 mb-2">{f.title}</h3>
             <p className="text-gray-300">{f.desc}</p>
-          </div>
+          </Link>
         ))}
       </section>
+
 
       {/* Glowing footer line */}
       <div className="w-full h-1 bg-gradient-to-r from-transparent via-green-400 to-transparent animate-glow-horizontal-reverse"></div>
