@@ -13,6 +13,8 @@ import LanguageLab from './pages/Dashboard_Pages/LanguageLab';
 import ProgressChronicle from './pages/Dashboard_Pages/ProgressChronicle';
 import ResumeBuilder from './pages/Dashboard_Pages/ResumeBuilder';
 import TechTrials from './pages/Dashboard_Pages/TechTrials';
+import About from "./pages/About";
+
 
 
 function App() {
@@ -31,6 +33,7 @@ function App() {
       <Route path="/ProgressChronicle" element={<ProgressChronicle />} />
       <Route path="/ResumeBuilder" element={<ResumeBuilder />} />
       <Route path="/TechTrials" element={<TechTrials />} />
+      <Route path="/about" element={<About />} />
     </Routes>
   )
 }
