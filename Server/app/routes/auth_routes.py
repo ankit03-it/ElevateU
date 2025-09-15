@@ -1,64 +1,45 @@
 from flask import Blueprint, request, jsonify
+from app.extensions import db
+from app.models.user_model import User
 from werkzeug.security import generate_password_hash, check_password_hash
-from ..models.user_model import User
-from ..models import db
-from werkzeug.exceptions import BadRequest
 
+auth_bp = Blueprint('auth', __name__)
 
-auth_bp = Blueprint("auth", __name__)
-
-@auth_bp.route("/signup", methods=["POST"])
-def signup():
+@auth_bp.route('/register', methods=['POST'])
+def register():
     data = request.get_json()
-    username = data.get("username")
-    email = data.get("email")
-    password = data.get("password")
+    username = data.get('username')
+    email = data.get('email')
+    password = data.get('password')
 
     if not username or not email or not password:
-        return jsonify({"error": "All fields are required"}), 400
+        return jsonify({'message': 'Missing data'}), 400
 
+    # Check if user already exists
     if User.query.filter_by(email=email).first():
-        return jsonify({"error": "Email already exists"}), 409
+        return jsonify({'message': 'User with this email already exists'}), 409
 
-    if User.query.filter_by(username=username).first():
-        return jsonify({"error": "Username already exists"}), 409
-
+    # Create a new user
     hashed_password = generate_password_hash(password)
     new_user = User(username=username, email=email, password_hash=hashed_password)
-
-
     db.session.add(new_user)
     db.session.commit()
 
-    return jsonify({"message": "User registered successfully!"}), 201
+    return jsonify({'message': 'User created successfully'}), 201
 
-
-@auth_bp.route("/login", methods=["POST"])
+@auth_bp.route('/login', methods=['POST'])
 def login():
-    try:
-        data = request.get_json()
-        if data is None:
-            raise BadRequest("Invalid or missing JSON payload.")
-    except BadRequest as e:
-        return jsonify({"error": str(e)}), 400
-
-    email = data.get("email")
-    password = data.get("password")
+    data = request.get_json()
+    email = data.get('email')
+    password = data.get('password')
 
     if not email or not password:
-        return jsonify({"error": "Both email and password are required."}), 400
+        return jsonify({'message': 'Missing data'}), 400
 
     user = User.query.filter_by(email=email).first()
 
-    if user is None:
-        return jsonify({"error": "No account found with this email."}), 404
+    # Check if the user exists and the password is correct
+    if not user or not check_password_hash(user.password_hash, password):
+        return jsonify({'message': 'Invalid credentials'}), 401
 
-    if not user.check_password(password):
-        return jsonify({"error": "Incorrect password."}), 401
-
-    # Optional: Return a token later
-    # token = generate_token(user.id)  
-    # return jsonify({"message": f"Welcome back, {user.username}!", "token": token}), 200
-
-    return jsonify({"message": f"Welcome back, {user.username}!"}), 200
-
+    return jsonify({'message': 'Login successful'}), 200
